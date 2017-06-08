@@ -1,0 +1,39 @@
+class Tuple implements Comparable<Tuple> {
+  int x, y, sum;
+  public Tuple(int x, int y, int sum) {
+   this.x = x;
+   this.y = y;
+   this.sum = sum;
+  }
+  @Override
+  public int compareTo(Tuple t) {
+   return this.sum - t.sum;
+  }
+ }
+
+public class Solution {
+
+ public int kthSmallestSum(int[] a, int[] b, int k) {
+  if(a == null || a.length == 0 || b == null || b.length == 0 || a.length * b.length < k) return -1;
+  PriorityQueue<Tuple> pq = new PriorityQueue<>();
+  HashSet<String> set = new HashSet<>();
+  pq.offer(new Tuple(0, 0, a[0] + b[0]));
+  set.add(0 + "," + 0);
+  for(int i = 0; i < k - 1; i ++) {
+   Tuple tuple = pq.poll();
+   if(tuple.x < a.length - 1) {
+    if(!set.contains((tuple.x + 1) + "," + tuple.y)) {
+     pq.offer(new Tuple(tuple.x + 1, tuple.y, a[tuple.x + 1] + b[tuple.y]));
+     set.add((tuple.x + 1) + "," + tuple.y);
+    }
+   }
+   if(tuple.y < b.length - 1) {
+    if(!set.contains(tuple.x + "," + (tuple.y + 1))) {
+     pq.offer(new Tuple(tuple.x, tuple.y + 1, a[tuple.x] + b[tuple.y + 1]));
+     set.add(tuple.x + "," + (tuple.y + 1));
+    }
+   }
+  }
+  return pq.poll().sum;
+ }
+}
