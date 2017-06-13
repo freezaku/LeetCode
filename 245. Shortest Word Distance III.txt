@@ -1,0 +1,29 @@
+public class Solution {
+    public int shortestWordDistance(String[] words, String word1, String word2) {
+        int pos1 = -1;
+        int pos2 = -1;
+        boolean isSame = word1.equals(word2);
+        int res = Integer.MAX_VALUE;
+        for(int i = 0; i < words.length; i ++) {
+            if(words[i].equals(word1)) {
+                if(isSame) {
+                    pos2 = pos1;
+                    pos1 = i;
+                } else {
+                    pos1 = i;
+                }
+            } else if(words[i].equals(word2)) {
+                pos2 = i;
+            }
+            if(pos1 != -1 && pos2 != -1)    res = Math.min(res, Math.abs(pos1 - pos2));
+        }
+        return res;
+    }
+}
+
+/*
+注意因为可能出现我word1和word2相同的情况，所以需要特别处理，
+当发现words[i]与word1相同的时候，若word1和word2相同，
+需要将pos2和pos1的值分别进行更新，
+其他的时候，和I的做法相同
+*/

@@ -1,0 +1,68 @@
+public class WordDictionary {
+    private class TrieNode {
+        Character val;
+        boolean isWord;
+        Map<Character, TrieNode> map;
+        public TrieNode() {
+            val = null;
+            isWord = false;
+            map = new HashMap<>();
+        }
+        public TrieNode(char chr) {
+            val = chr;
+            isWord = false;
+            map = new HashMap<>();
+        }
+    }
+    /** Initialize your data structure here. */
+    TrieNode root;
+    public WordDictionary() {
+        root = new TrieNode();
+    }
+    
+    /** Adds a word into the data structure. */
+    public void addWord(String word) {
+        TrieNode cur = root;
+        for(int i = 0; i < word.length(); i ++) {
+            char chr = word.charAt(i);
+            if(!cur.map.containsKey(chr)) {
+                cur.map.put(chr, new TrieNode(chr));
+            }
+            cur = cur.map.get(chr);
+            if(i == word.length() - 1)  cur.isWord = true;
+        }
+    }
+    
+    /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+    public boolean search(String word) {
+        TrieNode cur = root;
+        return searchWord(word, 0, cur);
+    }
+    private boolean searchWord(String word, int index, TrieNode cur) {
+        if(index == word.length())  return cur.isWord;
+        char chr = word.charAt(index);
+        if(chr == '.') {
+            Set<Character> set = cur.map.keySet();
+            for(char next: set) {
+                if(searchWord(word, index + 1, cur.map.get(next)))  return true;
+            }
+            return false;
+        } else {
+            if(!cur.map.containsKey(chr))   return false;
+            return searchWord(word, index + 1, cur.map.get(chr));
+        }
+    }
+}
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * boolean param_2 = obj.search(word);
+ */
+ 
+ /*
+跟Trie的构造方式基本一致，使用hashmap来构造解决，
+注意的是当遇到'.'的时候，需要遍历该cur下map的所有next来确定是否能search，
+因此需要一个searchWord的辅助函数。
+ */

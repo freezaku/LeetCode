@@ -1,0 +1,23 @@
+public class Solution {
+    public int shortestDistance(String[] words, String word1, String word2) {
+        int n = words.length;
+        int p1 = -1;
+        int p2 = -1;
+        int res = Integer.MAX_VALUE;
+        for(int i = 0; i < n; i ++) {
+            if(words[i].equals(word1)) {
+                p1 = i;
+            } else if(words[i].equals(word2)) {
+                p2 = i;
+            }
+            if(p1 != -1 && p2 != -1) {
+                res = Math.min(res, Math.abs(p1 - p2));
+            }
+        }
+        return res;
+    }
+}
+
+/*
+使用两个指针，当两指针均不为-1的时候表示已经置值了，可以进行min的计算
+*/

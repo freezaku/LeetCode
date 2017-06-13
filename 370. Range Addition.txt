@@ -1,0 +1,26 @@
+public class Solution {
+    public int[] getModifiedArray(int length, int[][] updates) {
+        int[] res = new int[length];
+        for(int[] update: updates) {
+            int start = update[0];
+            int end = update[1];
+            int num = update[2];
+            res[start] += num;
+            if(end < length - 1)    res[end + 1] += -num;
+        }
+        for(int i = 1; i < length; i ++) {
+            res[i] += res[i - 1];
+        }
+        return res;
+    }
+}
+
+/*
+start位置加上当前的value，end + 1位置若小于length，则在end + 1位置减去当前的valu。
+*/
+
+扩展：当原数组已经有了初值，并且每个元素都不相同的时候
+
+将原数组从尾到头-=获得新的数组，然后按照该题的方法解决即可
+例如 2，3，10，5 -》 2，3，10，5-10=-5 -》2，3，10-3=7，-5 -》2，3-2=1，7，5
+最终为2，1，7，-5

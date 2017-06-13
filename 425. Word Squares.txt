@@ -1,0 +1,162 @@
+public class Solution {
+    class TrieNode {
+        List<String> startWith;
+        TrieNode[] children;
+        TrieNode() {
+            startWith = new ArrayList<>();
+            children = new TrieNode[26];
+        }
+    }
+    
+    class Trie {
+        TrieNode root;
+        
+        Trie(String[] words) {
+            root = new TrieNode();
+            for(String w: words) {
+                TrieNode cur = root;
+                for(char chr: w.toCharArray()) {
+                    int idx = chr - 'a';
+                    if(cur.children[idx] == null) {
+                        cur.children[idx] = new TrieNode();
+                    }
+                    cur.children[idx].startWith.add(w);
+                    cur = cur.children[idx];
+                }
+            }
+        }
+        
+        List<String> findByPrefix(String prefix) {
+            List<String> ans = new ArrayList<>();
+            TrieNode cur = root;
+            for(char chr: prefix.toCharArray()) {
+                int idx = chr - 'a';
+                if(cur.children[idx] == null)   return ans;
+                cur = cur.children[idx];
+            }
+            ans.addAll(cur.startWith);
+            return ans;
+        }
+    }
+    public List<List<String>> wordSquares(String[] words) {
+        List<List<String>> res = new ArrayList<>();
+        if(words == null || words.length == 0)   return res;
+        Trie trie = new Trie(words);
+        int len = words[0].length();
+        List<String> list = new ArrayList<>();
+        for(String word: words) {
+            list.add(word);
+            search(len, trie, res, list);
+            list.remove(list.size() - 1);
+        }
+        return res;
+    }
+    private void search(int len, Trie trie, List<List<String>> res, List<String> list) {
+        if(list.size() == len) {
+            res.add(new ArrayList<>(list));
+            return;
+        }
+        int idx = list.size();
+        StringBuilder sb = new StringBuilder();
+        for(String word: list) {
+            sb.append(word.charAt(idx));
+        }
+        List<String> startWith = trie.findByPrefix(sb.toString());
+        for(String choice: startWith) {
+            list.add(choice);
+            search(len, trie, res, list);
+            list.remove(list.size() - 1);
+        }
+    }
+}
+
+/*
+class trie中，trie(String[] words)遍历words中的所有单词，构造字典树，
+root代表根，没有单词在其中，后面每次遇到的单词都重新指向这个root，
+每次将一个单词中的一位取出，将其children[idx].startwith中加入当前的单词，
+同时将该cur指向cur.children[idx]；
+findByPrefix方法，给出一个prefix，然后根据该prefix，找到满足其的所有word，
+这些word都被存储在一个children的start with中，最后返回该start with就得到了符合条件的所有word；
+
+在word square中，初始化字典树trie，len为words[0]的长度，也是我们需要的长度，
+每次将一个单词放入list，作为初始的第一行，然后search，最后需要remove；
+
+search中，当list的长度为len的时候，加入res；
+否则利用当前list的大小提取idx，再遍历list中的单词构造prefix，
+对于该prefix，利用findbyprefix找到所有符合条件的单词放入start with的list中，
+遍历startwith的每个单词，作为下一行的可能，继续进行search，最后记得remove掉最后一个。
+*/
+
+public class Solution {
+    private class TrieNode {
+        Character val;
+        TrieNode[] children;
+        List<String> wordList;
+        public TrieNode() {
+            val = null;
+            children = new TrieNode[26];
+            wordList = new ArrayList<>();
+        }
+        public TrieNode(char chr) {
+            val = chr;
+            children = new TrieNode[26];
+            wordList = new ArrayList<>();
+        }
+    }
+    private class Trie {
+        TrieNode root;
+        public Trie(String[] words) {
+            root = new TrieNode();
+            for(String word: words) {
+                TrieNode cur = root;
+                for(char chr: word.toCharArray()) {
+                    int index = chr - 'a';
+                    if(cur.children[index] == null) cur.children[index] = new TrieNode(chr);
+                    cur.children[index].wordList.add(word);
+                    cur = cur.children[index];
+                }
+            }
+        }
+        public List<String> findCandidates(String prefix) {
+            List<String> candidates = new ArrayList<>();
+            TrieNode cur = root;
+            for(char chr: prefix.toCharArray()) {
+                int index = chr - 'a';
+                if(cur.children[index] == null)    return candidates;
+                cur = cur.children[index];
+            }
+            candidates.addAll(cur.wordList);
+            return candidates;
+        }
+    }
+    public List<List<String>> wordSquares(String[] words) {
+        List<List<String>> res = new ArrayList<>();
+        if(words == null || words.length == 0)  return res;
+        Trie trie = new Trie(words);
+        int len = words[0].length();
+        List<String> list = new ArrayList<>();
+        for(String word: words) {
+            list.add(word);
+            search(trie, res, list, len);
+            list.remove(list.size() - 1);
+        }
+        return res;
+    }
+    private void search(Trie trie, List<List<String>> res, List<String> list, int len) {
+        if(list.size() == len) {
+            res.add(new ArrayList<>(list));
+            return;
+        }
+        int idx = list.size();
+        StringBuilder prefix = new StringBuilder();
+        for(String word: list) {
+            prefix.append(word.charAt(idx));
+        }
+        List<String> candidates = trie.findCandidates(prefix.toString());
+        for(String candidate: candidates) {
+            list.add(candidate);
+            search(trie, res, list, len);
+            list.remove(list.size() - 1);
+        }
+    }
+}

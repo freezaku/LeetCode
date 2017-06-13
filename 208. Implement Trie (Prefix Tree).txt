@@ -1,0 +1,89 @@
+class TrieNode {
+    Map<Character, TrieNode> map;
+    boolean isWord;
+    Character val;
+    public TrieNode() {
+        map = new HashMap<>();
+        isWord = false;
+        val = null;
+    }
+    public TrieNode(char chr) {
+        map = new HashMap<>();
+        isWord = false;
+        val = chr;
+    }
+}
+
+public class Trie {
+    private TrieNode root;
+    /** Initialize your data structure here. */
+    public Trie() {
+        root = new TrieNode();
+    }
+    
+    /** Inserts a word into the trie. */
+    public void insert(String word) {
+        TrieNode cur = root;
+        for(int i = 0; i < word.length(); i ++) {
+            char chr = word.charAt(i);
+            if(!cur.map.containsKey(chr)) {
+                cur.map.put(chr, new TrieNode(chr));
+            }
+            cur = cur.map.get(chr);
+            if(i == word.length() - 1)  cur.isWord = true;
+        }
+    }
+    
+    /** Returns if the word is in the trie. */
+    public boolean search(String word) {
+        TrieNode cur = root;
+        for(int i = 0; i < word.length(); i ++) {
+            char chr = word.charAt(i);
+            if(!cur.map.containsKey(chr))   return false;
+            if(!cur.map.containsKey(chr)) return false;
+            cur = cur.map.get(chr);
+        }
+        return cur.isWord;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    public boolean startsWith(String prefix) {
+        TrieNode cur = root;
+        for(int i = 0; i < prefix.length(); i ++) {
+            char chr = prefix.charAt(i);
+            if(!cur.map.containsKey(chr))   return false;
+            cur = cur.map.get(chr);
+        }
+        return true;
+    }
+}
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie obj = new Trie();
+ * obj.insert(word);
+ * boolean param_2 = obj.search(word);
+ * boolean param_3 = obj.startsWith(prefix);
+ */
+ 
+ /*
+ 用HashMap进行Trie的构造。
+首先需要构造TrieNode，里面包含有isWord，map和val，
+isWord表示有没有以该字母结尾的单词在其中，
+map表示一个节点和其引申出的TrieNode，
+val表示该节点的根值。
+注意val为Character的形式，在TrieNode()的构造中置为null。
+
+在Trie中，设置一个root为虚根节点，
+
+insert的时候，将cur置为root，
+然后不断判断word中的每个单词是否在该cur的map中，
+若不在则加入该cur的map中，
+并将cur置为cur.map.get(chr)，
+同时记得当遍历到word的最后一个char的时候，将其isWord置为true。
+
+search和startWith类似，
+都是遍历单词，一个一个比对，
+若没有出现，则返回false，否则继续，
+需要注意的是search在最后不能直接返回false，需要根据cur.isWord来判断返回。
+ */

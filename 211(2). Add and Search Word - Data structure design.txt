@@ -1,0 +1,73 @@
+public class WordDictionary {
+    private class TrieNode {
+        Character val;
+        boolean isWord;
+        TrieNode[] children;
+        public TrieNode() {
+            val = null;
+            isWord = false;
+            children = new TrieNode[26];
+        }
+        public TrieNode(char chr) {
+            val = chr;
+            isWord = false;
+            children = new TrieNode[26];
+        }
+    }
+    /** Initialize your data structure here. */
+    TrieNode root;
+    public WordDictionary() {
+        root = new TrieNode();
+    }
+    
+    /** Adds a word into the data structure. */
+    public void addWord(String word) {
+        TrieNode cur = root;
+        for(int i = 0; i < word.length(); i ++) {
+            char chr = word.charAt(i);
+            int index = chr - 'a';
+            if(cur.children[index] == null) cur.children[index] = new TrieNode();
+            cur = cur.children[index];
+        }
+        cur.isWord = true;
+    }
+    
+    /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+    public boolean search(String word) {
+        TrieNode cur = root;
+        return searchWord(word, 0, cur);
+    }
+    private boolean searchWord(String word, int index, TrieNode cur) {
+        if(index == word.length())  return cur.isWord;
+        char chr = word.charAt(index);
+        int chrIndex = chr - 'a';
+        if(chr == '.') {
+            for(int i = 0; i < 26; i ++) {
+                if(cur.children[i] != null) {
+                    if(searchWord(word, index + 1, cur.children[i]))   return true;
+                }
+            }
+            return false;
+        } else {
+            if(cur.children[chrIndex] == null) return false;
+            return searchWord(word, index + 1, cur.children[chrIndex]);
+        }
+    }
+}
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * boolean param_2 = obj.search(word);
+ */
+ 
+ /*
+ 跟Trie的构造方式基本一致，使用array来构造解决，
+TrieNode[] children = new TrieNode[26],
+用这种形式来存储所有的可能出现的char，
+然后在insert的时候，判断cur.children[index] == null，来判断是否需要加入一个cur.children[index] = new TrieNode(),
+最后加上cur.isWord = true，
+在search的时候，也是遍历word然后不断向下寻找，令cur = cur.children[chrIndex],
+遇到'.'的时候，遍历整个数组，来向下寻找。
+ */
