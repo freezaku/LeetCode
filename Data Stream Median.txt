@@ -1,0 +1,31 @@
+public class Solution {
+    /**
+     * @param nums: A list of integers.
+     * @return: the median of numbers
+     */
+    PriorityQueue<Integer> min = new PriorityQueue<>();
+    PriorityQueue<Integer> max = new PriorityQueue<>(
+        new Comparator<Integer>() {
+            public int compare(Integer a, Integer b) {
+                return b - a;
+            }
+        }
+    );
+    public int[] medianII(int[] nums) {
+        // write your code here
+        int[] res = new int[nums.length];
+        for(int i = 0; i < nums.length; i ++) {
+            res[i] = findMedian(nums[i]);
+        }
+        return res;
+    }
+    private int findMedian(int num) {
+        max.offer(num);
+        min.offer(max.poll());
+        if(min.size() > max.size()) {
+            max.offer(min.poll());
+        }
+        
+        return max.peek();
+    }
+}

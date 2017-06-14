@@ -1,0 +1,51 @@
+public class MyStack {
+    Queue<Integer> queue;
+    /** Initialize your data structure here. */
+    public MyStack() {
+        queue = new LinkedList<>();
+    }
+    
+    /** Push element x onto stack. */
+    public void push(int x) {
+        Queue<Integer> temp = new LinkedList<>();
+        while(!queue.isEmpty()) {
+            temp.offer(queue.poll());
+        }
+        queue.offer(x);
+        while(!temp.isEmpty()) {
+            queue.offer(temp.poll());
+        }
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    public int pop() {
+        return queue.poll();
+    }
+    
+    /** Get the top element. */
+    public int top() {
+        return queue.peek();
+    }
+    
+    /** Returns whether the stack is empty. */
+    public boolean empty() {
+        return queue.isEmpty();
+    }
+}
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
+ 
+/*
+ez，利用的是232中discussion中的方法，
+利用一个temp的queue，在每次push的时候，
+将queue中的所有元素放入temp中，
+再将新加入的元素加入queue，
+最后将temp中的元素加回queue
+*/

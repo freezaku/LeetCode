@@ -1,0 +1,123 @@
+public class Solution {
+    public double[] medianSlidingWindow(int[] nums, int k) {
+        double[] res = new double[nums.length - k + 1];
+        TreeMap<Integer, Integer> min = new TreeMap<>();
+        TreeMap<Integer, Integer> max = new TreeMap<>(Collections.reverseOrder());
+        int minCap = k / 2;
+        int maxCap = k - minCap; 
+        
+        for(int i = 0; i < k; i ++) {
+            max.put(nums[i], max.getOrDefault(nums[i], 0) + 1);
+        }
+        
+        int[] minSize = {0};
+        int[] maxSize = {k};
+        for(int i = 0; i < minCap; i ++) {
+            transTo(max, min, maxSize, minSize);
+        }
+        
+        res[0] = getMedian(max, min, maxSize, minSize);
+        
+        int index = 1;
+        
+        for(int i = 0; i < nums.length - k; i ++) {
+            int addee = nums[i + k];
+            if(addee <= max.keySet().iterator().next()) {
+                add(addee, max, maxSize);
+            } else {
+                add(addee, min, minSize);
+            }
+            
+            int removee = nums[i];
+            if(removee <= max.keySet().iterator().next()) {
+                remove(removee, max, maxSize);
+            } else {
+                remove(removee, min, minSize);
+            }
+            
+            if(minSize[0] > minCap) {
+                transTo(min, max, minSize, maxSize);
+            } else if(minSize[0] < minCap){
+                transTo(max, min, maxSize, minSize);
+            }
+            
+            res[index] = getMedian(max, min, maxSize, minSize);
+            index ++;
+        }
+        
+        return res;
+    }
+    
+    private double getMedian(TreeMap<Integer, Integer> heap1, TreeMap<Integer, Integer> heap2, int[] heap1Size, int[] heap2Size) {
+        if(heap1Size[0] > heap2Size[0]) {
+            return (double)heap1.keySet().iterator().next();
+        } else {
+            return ((double)heap1.keySet().iterator().next() + (double)heap2.keySet().iterator().next()) / 2.0;
+        }
+    }
+    
+    private void transTo(TreeMap<Integer, Integer> heap1, TreeMap<Integer, Integer> heap2, int[] heap1Size, int[] heap2Size) {
+        int peek = heap1.keySet().iterator().next();
+        add(peek, heap2, heap2Size);
+        remove(peek, heap1, heap1Size);
+    }
+    
+    private void add(int val, TreeMap<Integer, Integer> heap, int[] heapSize) {
+        heap.put(val, heap.getOrDefault(val, 0) + 1);
+        heapSize[0] ++;
+    }
+    
+    private void remove(int val, TreeMap<Integer, Integer> heap, int[] heapSize) {
+        heap.put(val, heap.get(val) - 1);
+        if(heap.get(val) == 0)  heap.remove(val);
+        heapSize[0]--;
+    }
+}
+
+/*
+使用treemap解决，时间复杂度更低，为O(nk)；
+
+定义两个treemap -- minheap和maxheap，
+key为数值，value为出现的次数，
+配备他们的cap为k / 2 和 k - minCap，
+配备他们的size为两个长度为1的数组；
+
+将数组内的前k个元素add进maxheap中，
+改变他们的size分别为k和0；
+
+然后将maxheap中取出minCap个元素，放入minheap中，
+这样就完成了maxheap和minheap的首次平衡，
+利用getMedian可以求得第一个所需要的median；
+
+然后遍历数组，
+每次有一个数需要加入设为addee，
+根据这个数的大小，将其放入maxheap或minheap，
+每次有个一个数需要remove设为removee，
+根据这个数的大小，将其从maxheap或minheap中remove掉；
+
+然后再比较minHeap的size与其cap的关系，
+当小于其cap的时候，说明maxheap多了，
+需要从maxheap中trans过来一个，
+若大于其cap，说明minheap多了，
+需要从minheap中trans过去一个，
+
+每次完成这一系列操作之后，都要求一个median，然后加入结果中。
+
+getMedian：
+因为maxheap的size总是大于等于minheap，
+大于时，返回maxheap的第一个元素，
+等于时，返回maxheap和minheap首元素的平均值。
+
+trans：
+获取heap1中的首元素，
+将其add到heap2中，并从heap1中remove掉。
+
+add：
+加入元素到指定heap，更新value的值和heap的大小。
+
+remove：
+减少元素的数量从指定heap中，若数量降为0，将其删去，
+更新heap的大小。
+
+注意获取map的首元素，使用map.keySet().iterator().next()
+*/

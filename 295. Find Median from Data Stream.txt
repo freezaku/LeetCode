@@ -1,0 +1,51 @@
+public class MedianFinder {
+    PriorityQueue<Integer> minHeap;
+    PriorityQueue<Integer> maxHeap;
+    /** initialize your data structure here. */
+    public MedianFinder() {
+        minHeap = new PriorityQueue<>();
+        maxHeap = new PriorityQueue<>(
+            new Comparator<Integer>() {
+                public int compare(Integer a, Integer b) {
+                    return b - a;
+                }
+            }
+        );
+    }
+    
+    public void addNum(int num) {
+        maxHeap.offer(num);
+        minHeap.offer(maxHeap.poll());
+        if(minHeap.size() > maxHeap.size()) {
+            maxHeap.offer(minHeap.poll());
+        }
+    }
+    
+    public double findMedian() {
+        if(maxHeap.size() == minHeap.size()) {
+            return (maxHeap.peek() + minHeap.peek()) / 2.0;
+        } else {
+            return maxHeap.peek();
+        }
+    }
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
+ 
+/*
+使用两个pq，利用他们之间的大小平衡获得中位数。
+运用了很巧妙的方法，减少了很多大小的比较工作，
+首先直接给maxheap加上num，
+再将maxheap进行poll，将poll出来的值加入到minheap中，
+若此时minheap的size大于maxheap的size，则将maxheap中offer上一个minheap里poll出来的东西，
+这一系列操作保证了maxheap的size始终大于等于minheap的size，
+同时，也保证了maxheap中的值都小于minheap中的值，
+
+在findMedian中，若两者size相同，求平均值，
+否则，肯定是maxheap的size更大，返回maxheap的peek即可
+*/
