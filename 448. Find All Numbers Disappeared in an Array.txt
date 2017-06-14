@@ -1,0 +1,26 @@
+public class Solution {
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        List<Integer> res = new ArrayList<>();
+        for(int i = 0; i < nums.length; i ++) {
+            int val = Math.abs(nums[i]) - 1;
+            if(nums[val] > 0) {
+                nums[val] = -nums[val];
+            }
+        }
+        for(int i = 0; i < nums.length; i ++) {
+            if(nums[i] > 0) {
+                res.add(i + 1);
+            }
+        }
+        return res;
+    }
+}
+
+/*
+这种连续的数组缺少了什么元素的题目，基本都是利用下标来做文章的，
+这题中，将nums[i] - 1作为新的下标，然后将该下标对应的元素，置为相反数，
+这样，所有遇到的元素都会被置为负值，
+至于为什么需要-1，是因为给的数的范围是从1到n，下标是从0开始的，需要-1来配合下标，
+注意有时候该nums[i]已经被置为负值，因此需要使用math.abs[nums[i]]的方法，
+最后，再次遍历数组，所有没有变为负值的地方，说明没有该数
+*/

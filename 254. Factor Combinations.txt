@@ -1,0 +1,30 @@
+public class Solution {
+    public List<List<Integer>> getFactors(int n) {
+        List<List<Integer>> res = new ArrayList<>();
+        if(n == 1)  return res;
+        helper(res, new ArrayList<Integer>(), 2, n);
+        return res;
+    }
+    private void helper(List<List<Integer>> res, List<Integer> list, int start, int n) {
+        if(n == 1) {
+            if(list.size() > 1) {
+                res.add(new ArrayList<>(list));
+            }
+            return;
+        }
+        for(int i = start; i <= n; i ++) {
+            if(n % i == 0) {
+                list.add(i);
+                helper(res, list, i, n / i);
+                list.remove(list.size() - 1);
+            }
+        }
+    }
+}
+
+/*
+唯一需要注意的就是保证如何不将其本身加入到list中，
+这就需要在加入res之前保证list的size大于1，
+这样其本身就不会加入，
+而其后的哪些子问题的数其本身的factor可以顺利加入
+*/

@@ -1,0 +1,39 @@
+public class WordDistance {
+    private Map<String, List<Integer>> map;
+    public WordDistance(String[] words) {
+        map = new HashMap<>();
+        for(int i = 0; i < words.length; i ++) {
+            if(!map.containsKey(words[i])) {
+                map.put(words[i], new ArrayList<Integer>());
+            }
+            map.get(words[i]).add(i);
+        }
+    }
+    
+    public int shortest(String word1, String word2) {
+        List<Integer> list1 = map.get(word1);
+        List<Integer> list2 = map.get(word2);
+        int res = Integer.MAX_VALUE;
+        int ptr1 = 0;
+        int ptr2 = 0;
+        while(ptr1 < list1.size() && ptr2 < list2.size()) {
+            res = Math.min(res, Math.abs(list1.get(ptr1) - list2.get(ptr2)));
+            if(list1.get(ptr1) < list2.get(ptr2)) {
+                ptr1 ++;
+            } else {
+                ptr2 ++;
+            }
+        }
+        return res;
+    }
+}
+
+/**
+ * Your WordDistance object will be instantiated and called as such:
+ * WordDistance obj = new WordDistance(words);
+ * int param_1 = obj.shortest(word1,word2);
+ */
+ 
+/*
+用hashmap构造通用的结构，同时注意在遍历的环节，可以使用特殊方法，注意技巧
+*/

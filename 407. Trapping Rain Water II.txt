@@ -1,0 +1,70 @@
+public class Solution {
+    class Tuple {
+        int x;
+        int y;
+        int height;
+        public Tuple(int x, int y, int height) {
+            this.x = x;
+            this.y = y;
+            this.height = height;
+        }
+    }
+    public int trapRainWater(int[][] heightMap) {
+        if(heightMap == null || heightMap.length == 0 || heightMap[0].length == 0)    return 0;
+        int sum = 0;
+        PriorityQueue<Tuple> pq = new PriorityQueue<Tuple>(
+            new Comparator<Tuple>() {
+                public int compare(Tuple a, Tuple b) {
+                    return a.height - b.height;
+                }
+        });
+        int m = heightMap.length;
+        int n = heightMap[0].length;
+        int[] dx = {-1, 1, 0, 0};
+        int[] dy = {0, 0, -1, 1};
+        for(int i = 0; i < m; i ++) {
+            pq.offer(new Tuple(i, 0, heightMap[i][0]));
+            pq.offer(new Tuple(i, n - 1, heightMap[i][n - 1]));
+            heightMap[i][0] = -1;
+            heightMap[i][n - 1] = -1;
+        }
+        for(int i = 1; i < n - 1; i ++) {
+            pq.offer(new Tuple(0, i, heightMap[0][i]));
+            pq.offer(new Tuple(m - 1, i, heightMap[m - 1][i]));
+            heightMap[0][i] = -1;
+            heightMap[m - 1][i] = -1;
+        }
+        while(!pq.isEmpty()) {
+            Tuple tuple = pq.poll();
+            int x = tuple.x;
+            int y = tuple.y;
+            int height = tuple.height;
+            for(int i = 0; i < 4; i ++) {
+                int xx = x + dx[i];
+                int yy = y + dy[i];
+                if(xx < 0 || yy < 0 || xx >= m || yy >= n || heightMap[xx][yy] == -1)  continue;
+                sum += Math.max(0, height - heightMap[xx][yy]);
+                pq.offer(new Tuple(xx, yy, Math.max(heightMap[xx][yy], height)));
+                heightMap[xx][yy] = -1;
+            }
+        }
+        return sum;
+    }
+}
+
+/*
+基本思想是利用pq来解决，
+可以看出所有的水都肯定在四周边界以内，边界处不可能圈住水，
+因此首先想到从四周往里面找，
+四周我们也从最低的地方开始找起，
+因此先使用一个pq将四周边界全部放进去，minstack不断poll出来最低的地方，
+根据poll出来的tuple，我们去找他的上下左右，
+当其neighbor的高度比他低的时候表示可以圈入水，所以将sum改变更新，
+同时将新的点加入pq，
+需要注意的是新加入的点的高度需要做一定的改变，改为其本身和原来的点高度的max值，
+因为将新的点加入进去之后，
+这个要么比较矮，有水圈进去，这个地方就相当于和高的点一样的高度了，变成了新的屏障
+要么比较高，不变；
+
+这题中还需要每次都判断visited，直接将原数组改变，visited之后将其height置为-1即可
+*/
