@@ -1,0 +1,49 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    int maxVal = Integer.MIN_VALUE;
+    public int maxPathSum(TreeNode root) {
+        dfsBottomUp(root);
+        return maxVal;
+    }
+    private int dfsBottomUp(TreeNode root) {
+        if(root == null)    return 0;
+        
+        int left = Math.max(0, dfsBottomUp(root.left));
+        int right = Math.max(0, dfsBottomUp(root.right));
+        
+        maxVal = Math.max(maxVal, left + right + root.val);
+        
+        return Math.max(left, right) + root.val;
+    }
+}
+
+/*
+想简单了，这题完全不会做的说。
+这题的难点在于两种情况，
+第一种：
+找到的maxpath跟当前节点无关，完全是由左子树或者右子树来决定了，
+即 maxpathsum = Math.max(maxpathsum(root.left), maxpathsum(root.right)) + root.val，
+这种情况下不在当前节点拐弯
+第二种：
+找到的maxpath通过当前的节点，同时也必须包含root.left和root.right，
+即 maxpahtsum = root.val + root.left.val + root.right.val + ？？？，
+而且此时left和right也必须是singlepath这种形式，不能再有转弯的部分。
+
+但是真正实施的时候，需要使用全局变量maxval来从bottom到top来进行更新，
+dfsbottomup这个辅助函数的返回值，是singlepath所可能的最大值，即通过当前节点，且不在当前节点转弯的path的最大值，
+
+left的值为0和dfs(root.left)的最大值，right的值为0和dfs(root.right)的最大值，
+left和right代表通过root.left和root.right的single path的最大值，但是在他们各自的循环中，可以更新maxval，来得到最终答案的可能，
+maximal在下面更新为maximal和left+right+root.val的最大值，后者代表的就是通过当前的root的拐弯的path的sum，
+返回的是如上面所说的，包含当前root的single path的sum
+
+很难，需要加深理解
+*/

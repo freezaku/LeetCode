@@ -1,0 +1,52 @@
+public class Solution {
+    public boolean verifyPreorder(int[] preorder) {
+        int min = Integer.MIN_VALUE;
+        Stack<Integer> stack = new Stack<>();
+        for(int node: preorder) {
+            if(node < min)  return false;
+            while(!stack.isEmpty() && stack.peek() < node) {
+                min = stack.pop();
+            }
+            stack.push(node);
+        }
+        return true;
+    }
+}
+
+/*
+有了基本思路，但是没有更进一步得到解法，
+BST的preorder的数组，第一个元素一定是root，
+在root后会出现一系列小于root的元素，
+这些元素属于root.left，再之后的元素属于root.right，他们都应当大于root，
+因此可以根据这个特性去查找错误，
+当在连续大于的元素中，出现了一个小于root的元素，返回false；
+
+运用stack简化了这个过程，stack是一个单调减的stack，
+初始化min为MIN_VALUE，遍历数组，
+放入一系列小于stack.peek的元素，他们单调递减，且一直沿着root.left往左，
+当出现了一个大于stack.peek的元素的时候，说明进入了某个right子树，
+此时将所有小于该node的数pop出去，并更新min，
+最后min就成了小于该node的最大的数，也就是该右node的parent，
+后面不应当出现比该min更小的数了。
+*/
+
+public class Solution {
+    public boolean verifyPreorder(int[] preorder) {
+        return helper(preorder, 0, preorder.length - 1);
+    }
+    private boolean helper(int[] preorder, int start, int end){
+        if(end - start <= 1) return true;
+        int breakPoint = start + 1;
+        int root = preorder[start];
+        // breakPoint should stop at index of first element > root
+        // if no left subtree, breakPoint stops at start;
+        for(int i = start + 1; i <= end; i++){
+        if(preorder[i] < root) breakPoint ++;
+        else break;
+        }
+        for(int i = breakPoint; i <= end; i++){
+            if(preorder[i] < root) return false;
+        }
+        return helper(preorder, start + 1, breakPoint - 1) && helper(preorder, breakPoint, end);
+    }
+}
