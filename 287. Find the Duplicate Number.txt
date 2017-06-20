@@ -53,3 +53,46 @@ RHS means: the slow tag moves (n-1) cycles plus the length from the meetpoint to
 
 So, we can get the entry point when the new tag meet the slow tag.
 */
+
+public class Solution {
+    /**
+     * @param nums an array containing n + 1 integers which is between 1 and n
+     * @return the duplicate one
+     */
+    public int findDuplicate(int[] nums) {
+        // Write your code here
+        int start = 1;
+        int end = nums.length - 1;
+        
+        while(end - start > 1) {
+            int mid = start + (end - start) / 2;
+            if(count(mid, nums) <= mid ) {
+                start = mid;
+            } else {
+                end = mid;
+            }
+        }
+        
+        if(count(start, nums) > start) {
+            return start;
+        } else {
+            return end;
+        }
+    }
+    private int count(int target, int[] nums) {
+        int res = 0;
+        for(int num: nums) {
+            if(num <= target)   res ++;
+        }
+        return res;
+    }
+}
+
+/*
+利用Binary Search进行解决，
+在1和n之间猜测一个可能重复的值mid，
+遍历nums计算有几个小于等于mid的值，
+若个数少于等于mid，则说明在这其中没有重复的数，
+反之说明有重复的数，
+根据判断缩小范围
+*/
