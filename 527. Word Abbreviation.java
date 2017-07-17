@@ -38,6 +38,7 @@ public class Solution {
     }
 }
 
+
 /*
 思路不难想，但是有点复杂。
 用prefix数组存储对于每个word，保存的前面的数位的个数，用于指示压缩。
