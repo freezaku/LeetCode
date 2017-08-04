@@ -73,3 +73,54 @@ public class Solution {
 /*
 利用bst来寻找最左边和最右边的两个边界，
 */
+
+public class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        if(nums == null || nums.length == 0)    return new int[]{-1, -1};
+        
+        int[] res = new int[2];
+        res[0] = findFirst(nums, target);
+        res[1] = findLast(nums, target);
+        
+        return res;
+    }
+    
+    private int findFirst(int[] nums, int target) {
+        int lo = 0;
+        int hi = nums.length - 1;
+        
+        while(lo + 1 < hi) {
+            int mid = lo + (hi - lo) / 2;
+            if(nums[mid] >= target) {
+                hi = mid;
+            } else {
+                lo = mid;
+            }
+        }
+        
+        if(nums[lo] == target)  return lo;
+        if(nums[hi] == target)  return hi;
+        return -1;
+    }
+    
+    private int findLast(int[] nums, int target) {
+        int lo = 0;
+        int hi = nums.length - 1;
+        
+        while(lo + 1 < hi) {
+            int mid = lo + (hi - lo) / 2;
+            if(nums[mid] <= target) {
+                lo = mid;
+            } else {
+                hi = mid;
+            }
+        }
+        
+        if(nums[hi] == target)  return hi;
+        if(nums[lo] == target)  return lo;
+        return -1;
+    } 
+}
+/*
+改用lo + 1 < hi的方式来重做Binary search的题目，防止边界条件出现问题
+*/
