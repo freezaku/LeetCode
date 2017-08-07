@@ -1,0 +1,5 @@
+Java 刷题注意点及常用方法
+1. Arrays.asList()
+Arrays.asList(nums[i], nums[j], nums[k]);
+eg. Leetcode 15.3Sum
+res.add(Arrays.asList(nums[i], nums[j], nums[k]));
