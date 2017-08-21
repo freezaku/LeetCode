@@ -1,5 +1,17 @@
 Java 刷题注意点及常用方法
+
 1. Arrays.asList()
 Arrays.asList(nums[i], nums[j], nums[k]);
 eg. Leetcode 15.3Sum
 res.add(Arrays.asList(nums[i], nums[j], nums[k]));
+
+2. Comparator 写法
+Arrays.sort(strs, new Comparator<String>() {
+    @Override
+    public int compare(String a, String b) {
+        String str1 = a + b;
+        String str2 = b + a;
+        return str2.compareTo(str1);
+    }
+});
+
