@@ -15,3 +15,14 @@ Arrays.sort(strs, new Comparator<String>() {
     }
 });
 
+3. Bit Manipulation的常用技巧
+(1) (n >> i) & 1
+	获取从右数第i位数, 结果为1的话说明该位为1
+(2) n & (n - 1)
+	a. (n & (n - 1)) == 0
+	判断n是否为2次幂
+	b. while (n >0 ) {
+      	count ++;
+      	n &= (n-1);
+	   }
+	求某一个数的二进制表示中1的个数
