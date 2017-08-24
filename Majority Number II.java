@@ -1,67 +1,66 @@
-Given an array of integers and a number k, the majority number is the number that occurs more than 1/k of the size of the array.
+Given an array of integers, the majority number is the number that occurs more than 1/3 of the size of the array.
 
 Find it.
 
+ Notice
+
+There is only one majority number in the array.
+
+Have you met this question in a real interview? Yes
 Example
-Given [3,1,2,3,2,3,3,4,4,4] and k=3, return 3.
+Given [1, 2, 1, 2, 1, 3, 3], return 1.
 
 public class Solution {
-    /**
-     * @param nums: A list of integers
-     * @param k: As described
-     * @return: The majority number
+    /*
+     * @param nums: a list of integers
+     * @return: The majority number that occurs more than 1/3
      */
-    public int majorityNumber(ArrayList<Integer> nums, int k) {
-        // write your code
-        List<Integer> count = new ArrayList<>();
-        List<Integer> candidate = new ArrayList<>();
+    public int majorityNumber(List<Integer> nums) {
+        // write your code here
+        int num1 = nums.get(0);
+        int count1 = 0;
+        int num2 = nums.get(0);
+        int count2 = 0;
         
-        for(int i = 0; i < nums.size(); i ++) {
-            int num = nums.get(i);
-            if(candidate.size() < k - 1 && !candidate.contains(num)) {
-                candidate.add(num);
-                count.add(1);
+        for(int num: nums) {
+            if(num1 == num) {
+                count1 ++;
+            } else if(num2 == num) {
+                count2 ++;
+            } else if(count1 == 0) {
+                num1 = num;
+                count1 ++;
+            } else if(count2 == 0) {
+                num2 = num;
+                count2 ++;
             } else {
-                int index = candidate.indexOf(num);
-                if(index != -1) {
-                    count.set(index, count.get(index) + 1);
-                } else {
-                    int zeroIndex = count.indexOf(0);
-                    if(zeroIndex != -1) {
-                        count.remove(zeroIndex);
-                        candidate.remove(zeroIndex);
-                        count.add(1);
-                        candidate.add(num);
-                    } else {
-                        for(int j = 0; j < count.size(); j ++) {
-                            count.set(j, count.get(j) - 1);
-                        }
-                    }
-                } 
+                count1 --;
+                count2 --;
             }
         }
         
-        for(int i = 0;i < candidate.size(); i ++) {
-            int cot = 0;
-            System.out.println("candidate is: " + candidate.get(i));
-            for(int num: nums) {
-                if(candidate.get(i) == num) {
-                    cot ++;
-                }
+        count1 = 0;
+        count2 = 0;
+        for(int num: nums) {
+            if(num1 == num) {
+                count1 ++;
+            } else if(num2 == num) {
+                count2 ++;
             }
-
-            if(cot > nums.size() / k)   return candidate.get(i);
         }
-        return -1;
+        
+        return count1 > count2 ? num1 : num2;
     }
 }
 
 /*
-利用两个list，一个存储candidate，一个存储对应candidate出现的次数，
-如果candidate数组中不包含这个数，且candidate的size小于k-1，直接将该数加到candidate中，
-否则，
-如果candidate中有该数，直接将其对应count++，
-如果count数组中有0，则将该count位置和对应的candidate去除，再将该数加入candidate和count中，
-如果count中没有0，则将所有count进行--，
-最后两层循环，遍历candidate和nums，计算candidate出现的次数，满足条件的return
+利用已有的经典MOORE'S VOTING ALGORITHM解决。
+
+注意各判定条件直接的顺序。
+先判断num是否与当前的num1或num2相同；
+再判断count1，count2是否为0；
+若都不是，则将count1和count2都--。
+
+最后再进行一次遍历，重新计算我们获得的num1和num2出现的次数，
+题目说明必有一个答案，因此返回次数更多的即可。
 */

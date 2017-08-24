@@ -26,3 +26,11 @@ Arrays.sort(strs, new Comparator<String>() {
       	n &= (n-1);
 	   }
 	求某一个数的二进制表示中1的个数
+(3) (-diff) = ~(diff - 1)
+	diff &= (-diff)
+	diff &= ~(diff - 1)
+	可以获取从左往右数第一个1的位置
+
+4. StringBuilder的delete
+	sb.delete(i, j)
+	删除index从i到j-1范围内的元素，i包含，j不包含
