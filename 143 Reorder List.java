@@ -44,3 +44,62 @@ public class Solution {
 
 关键就在于merge的方法，要好好学习体会。
 */
+
+/**
+ * Definition for ListNode.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int val) {
+ *         this.val = val;
+ *         this.next = null;
+ *     }
+ * }
+ */ 
+public class Solution {
+    /**
+     * @param head: The head of linked list.
+     * @return: void
+     */
+    public void reorderList(ListNode head) {  
+        // write your code here
+        if(head == null || head.next == null || head.next.next == null) return;
+        
+        ListNode fast = head;
+        ListNode slow = head;
+        while(fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        
+        ListNode tmp = slow.next;
+        slow.next = null;
+        ListNode head2 = reverse(tmp);
+        ListNode head1 = head;
+        
+        while(head1 != null && head2 != null) {
+            ListNode next1 = head1.next;
+            ListNode next2 = head2.next;
+            head1.next = head2;
+            head2.next = next1;
+            head1 = next1;
+            head2 = next2;
+        }
+        
+    }
+    
+    private ListNode reverse(ListNode head) {
+        if(head == null || head.next == null)   return head;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode pre = dummy;
+        ListNode cur = head;
+        while(cur != null && cur.next != null) {
+            ListNode next = cur.next;
+            cur.next = next.next;
+            next.next = pre.next;
+            pre.next = next;
+        }
+        return dummy.next;
+    }
+}

@@ -43,9 +43,9 @@ public class Solution {
         TreeNode cur = root;
         while(cur != null) {
             res.add(cur);
-            if(cur.left == null) {
+            if(cur.left != null) {
                 cur = cur.left;
-            } else if(cur.right == null) {
+            } else if(cur.right != null) {
                 cur = cur.right;
             } else {
                 while(cur.parent != null && (cur.parent.right == null || cur == cur.parent.right)) {

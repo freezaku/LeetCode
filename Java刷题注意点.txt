@@ -34,3 +34,11 @@ Arrays.sort(strs, new Comparator<String>() {
 4. StringBuilder的delete
 	sb.delete(i, j)
 	删除index从i到j-1范围内的元素，i包含，j不包含
+
+5. Binary Tree中遍历的类型
+(1) Preorder
+	中，左，右
+	Stack解决
+(2) Inorder
+	左，中，右
+
