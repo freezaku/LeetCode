@@ -41,4 +41,11 @@ Arrays.sort(strs, new Comparator<String>() {
 	Stack解决
 (2) Inorder
 	左，中，右
+	Stack, cur解决
+(3) Postorder
+	左，右，中
+	Stack, cur, pre解决
+
+4. arraylist在特定位置加element的方法
+	res.add(0, list);
 
