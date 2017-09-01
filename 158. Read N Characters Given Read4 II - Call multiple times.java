@@ -37,3 +37,45 @@ public class Solution extends Reader4 {
 因此再下次call的时候，bufCount != 0，会先将遗留在temp中char取出来再说。
 其他和I的思路方法一样
 */
+
+/* The read4 API is defined in the parent class Reader4.
+      int read4(char[] buf); */
+
+public class Solution extends Reader4 {
+    /**
+     * @param buf Destination buffer
+     * @param n   Maximum number of characters to read
+     * @return    The number of characters read
+     */
+    LinkedList<Character> list = new LinkedList<>();
+    public int read(char[] buf, int n) {
+        int total = 0;
+        while(true) {
+            char[] tmp = new char[4];
+            int in = read4(tmp);
+            
+            for(int i = 0; i < in; i ++) {
+                list.add(tmp[i]);
+            }
+            
+            in = Math.min(n - total, list.size());
+            
+            for(int i = 0; i < in; i ++) {
+                buf[total ++] = list.removeFirst();
+            }
+            
+            if(in == 0) break;
+        }
+        return total;
+    }
+}
+
+/*
+与第一题比较，变化是这样：
+比如先call了n=3，然后call n=5，那么第一次就读入了4个char，第二次call应该把上一次的最后一个char拿来。
+也就是说要有个cache取缓存已读取的字符，然后从这个cache里面取。
+每次读4个字符，放入 cache，然后in = Math.min(n - total, list.size()) 这个是精髓，
+这样就知道还需要多少个字符了。
+如果是in=0了，那么说明已经够了或者没字符了，这样就不用再读取了。
+使用linkedlist来cache上一次没有读完的char。
+*/

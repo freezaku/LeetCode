@@ -49,3 +49,5 @@ Arrays.sort(strs, new Comparator<String>() {
 4. arraylist在特定位置加element的方法
 	res.add(0, list);
 
+5. 返回一个新建的数组
+	return new int[]{i, j};
