@@ -51,3 +51,9 @@ Arrays.sort(strs, new Comparator<String>() {
 
 5. 返回一个新建的数组
 	return new int[]{i, j};
+
+6. String转换大小写的方法
+	s.toLowerCase();
+
+7. Char判断是否为alphanumeric characters的方法
+	Character.isLetterOrDigit(char);
