@@ -51,9 +51,16 @@ Arrays.sort(strs, new Comparator<String>() {
 
 5. 返回一个新建的数组
 	return new int[]{i, j};
+   返回一个空数组
+   	return new int[0];
 
 6. String转换大小写的方法
 	s.toLowerCase();
 
 7. Char判断是否为alphanumeric characters的方法
 	Character.isLetterOrDigit(char);
+
+8. DP中二维滚动数组dp[2][cols]
+	当前为i, j,当前dp位置为dp[i % 2][j]
+ 	访问前一行dp[(i - 1) % 2][j],
+ 	访问前一列dp[i % 2][j]

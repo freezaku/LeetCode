@@ -41,6 +41,41 @@ public class Solution {
 把endIndex和start的i均 ++，相当于腾出了一个room，然后再进行判断。
 */
 
+class Solution {
+    public int minMeetingRooms(Interval[] intervals) {
+        if(intervals == null || intervals.length == 0)  return 0;
+        
+        int n = intervals.length;
+        int[] starts = new int[n];
+        int[] ends = new int[n];
+        
+        for(int i = 0; i < intervals.length; i ++) {
+            starts[i] = intervals[i].start;
+            ends[i] = intervals[i].end;
+        }
+        
+        Arrays.sort(starts);
+        Arrays.sort(ends);
+        
+        int i = 0;
+        int j = 0;
+        int count = 0;
+        int res = 0;
+        while(i < n && j < n) {
+            if(starts[i] < ends[j]) {
+                i ++;
+                count ++;
+                res = Math.max(res, count);
+            } else {
+                count --;
+                j ++;
+            }
+        }
+        
+        return res;
+    }
+}
+
 /**
  * Definition for an interval.
  * public class Interval {
@@ -59,7 +94,7 @@ public class Solution {
         
         int count = 0;
         for(int i = 0; i < intervals.length; i ++) {
-            if(!pq.isEmpty() && intervals[i].start >= pq.peek().end) {
+            while(!pq.isEmpty() && intervals[i].start >= pq.peek().end) {
                 pq.poll();
             }
             pq.offer(intervals[i]);
