@@ -63,4 +63,25 @@ Arrays.sort(strs, new Comparator<String>() {
 8. DP中二维滚动数组dp[2][cols]
 	当前为i, j,当前dp位置为dp[i % 2][j]
  	访问前一行dp[(i - 1) % 2][j],
- 	访问前一列dp[i % 2][j]
+ 	访问前一列dp[i % 2][j - 1]
+
+9. Random的用法
+	Random rand = new Random();
+	int num = rand.nextInt(n);
+	num为[0, n)之间的一个随机整数
+
+10. Arrays.binarySearch
+(1) Arrays.binarySearch(int[] a, int num);
+	在数组a内搜索num
+	[1] 搜索值不是数组元素，且在数组范围内，从1开始计数，得“ - 插入点索引值”；
+	[2] 搜索值是数组元素，从0开始计数，得搜索值的索引值；
+	[3] 搜索值不是数组元素，且大于数组内元素，索引值为 – (length + 1);
+	[4] 搜索值不是数组元素，且小于数组内元素，索引值为 – 1。
+	一般情况，若得到index为负值，进行变换index = -(index + 1)得到应该插入的位置
+(2) Arrays.binarySearch(int[] a, int begin, int end, int num);
+	在数组a的[begin, end)内搜索num
+	[1] 该搜索键在范围内，但不是数组元素，由1开始计数，得“ - 插入点索引值”；
+	[2] 该搜索键在范围内，且是数组元素，由0开始计数，得搜索值的索引值；
+	[3] 该搜索键不在范围内，且小于范围（数组）内元素，返回–(fromIndex + 1)；
+	[4] 该搜索键不在范围内，且大于范围（数组）内元素，返回 –(toIndex + 1)。
+	一般情况，若得到index为负值，进行变换index = -(index + 1)得到应该插入的位置
