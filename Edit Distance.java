@@ -47,3 +47,34 @@ f(i - 1, j - 1) represents replace operation
 
 注意当word1的i 和 word2的j不相同的情况下，比较三个值分别是insert，delete和replace中最小的，然后还要+1才能得到此处新的最小值。
 */
+
+一维数组做法
+
+public int minDistance(String word1, String word2) {
+    if (word1 == null && word2 == null) return 0;
+    if (word1 == null) return word2.length();
+    if (word2 == null) return word1.length();
+        
+    int m = word1.length();
+    int n = word2.length();
+    int[] dp = new int[n + 1];
+    for (int i = 0; i < m + 1; i++) {
+        int[] temp = new int[n + 1];
+        for (int j = 0; j < n + 1; j++) {
+            if (i == 0) {
+                temp[j] = j;
+            } else if (j == 0) {
+                temp[j] = i;
+            } else {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    temp[j] = dp[j - 1]; 
+                } else {
+                    temp[j] = Math.min(Math.min(temp[j - 1], dp[j]), dp[j - 1]) + 1;
+                }
+            }
+        }
+        dp = temp;
+    }
+    
+    return dp[n];
+}
