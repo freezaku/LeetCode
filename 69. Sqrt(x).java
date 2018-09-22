@@ -1,7 +1,7 @@
 public class Solution {
     public int mySqrt(int x) {
         if(x == 0)  return 0;
-        int lo = 1;
+        int lo = 1; // 注意这里lo是1，不是0
         int hi = x;
         while(lo + 1 < hi) {
             int mid = lo + (hi - lo) / 2;
