@@ -1,0 +1,6 @@
+1. Two Sum
+使用let numHash = {}，就相当于一个hashmap，有key和其对应的value，
+可以通过numHash[index]直接找到对应的value
+
+2. Add Two Numbers
+直接使用 if(l1) 就能判断是否为l1当前是否为null
