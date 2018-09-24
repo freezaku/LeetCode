@@ -2,7 +2,7 @@
 time: O(NlogN)
 space: O(1)
 /*
-计算有多少个max non overlap的interval
+计算有多少个max non overlap的interval，根据end来排序，再来计算
 */
 
 class Solution {
@@ -35,7 +35,7 @@ class Solution {
 time: O(N^2)
 space: O(N)
 /*
-和同样的思想，时间复杂度和空间复杂度更高
+和同样的思想，时间复杂度和空间复杂度更高。根据start来排序，然后来计算dp
 */
 
 class Solution {
