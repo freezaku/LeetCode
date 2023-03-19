@@ -67,6 +67,6 @@ public class MinStack {
 }
 
 /*
-push进的数是min的时候，将该数push两次；
-pop出的数是min的时候，将该数pop两次；
+push进的数是min的时候，将原min push一次，再将该数push一次；
+pop出的数是min的时候，将原最上的数pop一次，再pop出来的就是min；
 */
